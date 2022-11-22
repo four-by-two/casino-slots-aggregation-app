@@ -1,0 +1,56 @@
+version: '3.6'
+services:
+  nginx:
+    image: nginx:1.19-alpine
+    container_name: default-structure-nginx
+    restart: always
+    volumes:
+      - ./public:/var/www/public
+      - ./nginx.develop.conf:/etc/nginx/nginx.conf
+    ports:
+      - 22777:22777
+    depends_on:
+      - app
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  app:
+    build:
+      context: .
+      args:
+        - COMPOSER_FLAGS=--prefer-dist --optimize-autoloader
+    command: /usr/local/sbin/php-fpm
+    container_name: default-structure-app
+    restart: always
+    user: $DOCKER_USER
+    ports:
+      - 9000:9000
+    environment:
+      - OPCACHE_SAVE_COMMENTS=0
+      - OPCACHE_VALIDATE_TIMESTAMPS=1
+      - OPCACHE_REVALIDATE_FREQ=0
+    volumes:
+      - .:/var/www
+      - ./php.ini:/usr/local/etc/php/php.ini
+      - ./www.conf:/usr/local/etc/php-fpm.d/www.conf
+    depends_on:
+      - pgsql
+      - redis
+  pgsql:
+    image: launcher.gcr.io/google/postgresql13
+    container_name: default-structure-pgsql
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: default
+      POSTGRES_USER: default
+      POSTGRES_PASSWORD: default
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+  redis:
+    image: library/redis:6.0.10-alpine
+    container_name: default-structure-redis
+    restart: always
+    volumes:
+      - redis-data:/data
+volumes:
+  pg-data:
+  redis-data:

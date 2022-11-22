@@ -1,0 +1,1 @@
+{!! $game_content['game_content']['modified_content'] !!}

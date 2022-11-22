@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Getting Started</title>
+</head>
+<body>
+
+<p id="status">Loading..</p>
+<iframe srcdoc="hi" class="iframe stdout" id="result"></iframe>
+
+<script type="application/javascript" src="main.js"></script>
+
+<script type="application/javascript">
+window.fetch = new Proxy(window.fetch, {
+    apply(fetch, that, args) {
+            console.log(args);
+            // Forward function call to the original fetch
+            const result = fetch.apply(that, args);
+            // Do whatever you want with the resulting Promise
+            result.then((response) => {
+                console.log(response.headers);
+
+                console.log("fetch completed!", args, response);
+            });
+            return result;
+    }
+});
+
+</script>
+<script>
+const ul = document.getElementById('authors');
+const list = document.createDocumentFragment();
+const url = 'https://jsonplaceholder.typicode.com/users';
+
+fetch(url)
+.then((response) => {
+    return response.json();
+})
+.then((data) => {
+    let authors = data;
+
+    authors.map(function(author) {
+        let li = document.createElement('li');
+        let name = document.createElement('h2');
+        let email = document.createElement('span');
+
+        name.innerHTML = `${author.name}`;
+        email.innerHTML = `${author.email}`;
+
+        li.appendChild(name);
+        li.appendChild(email);
+        list.appendChild(li);
+    });
+}).catch(function(error) {
+    console.log(error);
+});
+//ul.appendChild(list);
+</script>
+</body>
+</html>

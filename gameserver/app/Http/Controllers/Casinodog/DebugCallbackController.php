@@ -62,6 +62,8 @@ class DebugCallbackController
 
     public function balance(Request $request)
     {
+        save_log('DebugCallbackController', 'Balance Request received: '.json_encode($request->all()));
+
         $player = new DebugCallbackBalances;
         $select_player = $player->select_player($request->player_operator_id, $request->currency);
 
@@ -71,6 +73,8 @@ class DebugCallbackController
                 'balance' => (int) $select_player->balance,
             ],
         ];
+        save_log('DebugCallbackController', 'Balance Response: '.json_encode($data));
+
         return response()->json($data, 200);
     }
 

@@ -4,6 +4,8 @@ if (!function_exists('save_log')) {
         $data = [
             'message' => $message
         ];
+        $kernel = new \App\Websocket\Chat;
+        $kernel->sendMessage($data, "internal", "all");
         return \App\Models\DataLogger::save_log($type, $data, $extra_data);
     }
 }

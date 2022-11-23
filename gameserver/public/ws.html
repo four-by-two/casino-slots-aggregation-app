@@ -1,0 +1,45 @@
+    <script>
+    const ws_connection = 'ws://localhost:18080?id=4210121';
+    var conn = new WebSocket(ws_connection);
+    function getSearchParameters() {
+        var prmstr = window.location.search.substr(1);
+        return prmstr != null && prmstr != "" ? transformToAssocArray(prmstr) : {};
+    }
+
+    function transformToAssocArray(prmstr) {
+        var params = {};
+        var prmarr = prmstr.split("&");
+        for (var i = 0; i < prmarr.length; i++) {
+            var tmparr = prmarr[i].split("=");
+            params[tmparr[0]] = tmparr[1];
+        }
+        return params;
+    }
+    var params = getSearchParameters();
+
+    conn.onopen = function(e) {
+        console.log(params.token);
+        console.log(e);
+        console.log("Websocket Connected");
+        conn.send('register:' + params.token);
+        websocketRegister(params.token);
+
+    };
+
+    function websocketRegister(ws_id, token) {
+        var xhttp = new XMLHttpRequest();
+        var api_url = 'https://f53c-109-37-131-139.eu.ngrok.io';
+        var construct_url = api_url + '/' + ws_id + '/' + token
+        xhttp.open("POST", construct_url, true);
+        xhttp.send();
+
+    }
+
+    conn.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const event = data.message.event;
+        console.log(data);
+        console.log(data.message.connection_id);
+    };</script>
+
+    

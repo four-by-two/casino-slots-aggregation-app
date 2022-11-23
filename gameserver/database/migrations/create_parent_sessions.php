@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('token_original_bridge', 355);
             $table->string('state', 155);
             $table->string('operator_id', 255);
+            $table->string('ws_id', 255)->nullable();
             $table->json('extra_meta', 1500)->default('[]');
             $table->json('user_agent', 1500)->default('[]');
             $table->string('request_ip', 1500)->default('0.0.0.0');

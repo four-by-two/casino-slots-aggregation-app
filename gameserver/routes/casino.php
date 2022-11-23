@@ -3,13 +3,17 @@ use Illuminate\Http\Request;
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 $router->get('g', [
-    'as' => 'casino.testingcontroller', 'uses' => '\App\Http\Controllers\Casinodog\Game\SessionsHandler@entrySession'
+    'as' => 'casino.games.entry', 'uses' => '\App\Http\Controllers\Casinodog\Game\SessionsHandler@entrySession'
 ]);
-// Available when debug mode is enabled to test method functions fast. {$function_name} should be the name of function in TestingController
+
+// Available when env is set to local is enabled to test method functions fast. {$function_name} should be the name of function in TestingController
+
+$router->post('testing/{function_name}', [
+        'as' => 'casino.testingcontroller', 'uses' => '\App\Http\Controllers\Casinodog\TestingController@handle'
+]);
 $router->get('testing/{function_name}', [
     'as' => 'casino.testingcontroller', 'uses' => '\App\Http\Controllers\Casinodog\TestingController@handle'
 ]);
-
 // Callback Debug Player Balance
 $router->get('api/debug/callback', [
     'as' => 'casino.debug.callback', 'uses' => '\App\Http\Controllers\Casinodog\DebugCallbackController@handle'
@@ -61,6 +65,7 @@ $router->group(['prefix' => 'api/control/gameslist'], function () use ($router) 
 
 // API games routes
 $router->group(['prefix' => 'api/games'], function () use ($router) {
+    $router->post('register_ws', ['as' => 'casino.websocket.register', 'uses' => '\App\Http\Controllers\Casinodog\s@register']);
     // Catch all game API routes and send to the right place
     $router->get('{provider}/{internal_token}/{slug}/{action:.*}', function ($provider, $internal_token, $slug, $action, Request $request) use ($router) {
         return gameclass($provider)->game_event($request);

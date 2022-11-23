@@ -22,6 +22,7 @@ services:
     restart: always
     user: $DOCKER_USER
     ports:
+      - 18080:18080
       - 9000:9000
     environment:
       - OPCACHE_SAVE_COMMENTS=0

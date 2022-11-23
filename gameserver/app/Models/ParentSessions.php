@@ -14,6 +14,7 @@ class ParentSessions extends Eloquent  {
     protected $fillable = [
         'id',
         'player_id',
+        'ws_id',
         'player_operator_id',
         'game_id',
         'game_provider',

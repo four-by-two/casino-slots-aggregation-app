@@ -21,7 +21,7 @@ class MascotSessions extends MascotMain
             //$url = 'https://exapi.mascot.games/eva/2020-05-22?cid=parimatch&productId='.$game_identifier[1].'&lang=en&targetChannel=desktop&consumerId=mascot';
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_HEADER, true);
-            curl_setopt($ch, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+            curl_setopt($ch, CURLOPT_USERAGENT,'Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0');
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,0);
@@ -38,7 +38,7 @@ class MascotSessions extends MascotMain
 
             $session_id = str_replace('https://', '', $redirectURL);
             $session_id = explode('.', $session_id)[0];
-
+            save_log('Generated', $redirectURL);
             $data = [
                 'html' => $html,
                 'link' => $redirectURL,

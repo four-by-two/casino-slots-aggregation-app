@@ -1,21 +1,26 @@
 <?php
-    return [
-    'server_ip' => env('WAINWRIGHT_CASINODOG_SERVER_IP', '127.0.0.1'),
-    'data_caching' => env('WAINWRIGHT_CASINODOG_DATA_CACHING', false), //set to true to enable caching of various data such as gamelistings and so on, drastically improving performance
-    'securitysalt' => env('WAINWRIGHT_CASINODOG_SECURITY_SALT', env('APP_KEY'), 'AA61BED99602F187DA5D033D74D1A556'), // salt used for general signing of entry sessions and so on
-    'domain' => env('WAINWRIGHT_CASINODOG_DOMAIN', env('APP_URL'), 'https://127.0.0.1'),
-    'hostname' => env('WAINWRIGHT_CASINODOG_HOSTNAME', '777.dog'),
-    'master_ip' => env('WAINWRIGHT_CASINODOG_MASTER_IP', '127.0.0.1'), // this IP should be your personal or whatever your testing on, this IP will surpass the Operator IP check
-    'testing' => env('WAINWRIGHT_CASINODOG_TESTINGCONTROLLER', true), //set to false to hard override disable all tests through TestingController. When set to true and APP_DEBUG is set to true in .env, you can make use of TestingController
-    'cors_anywhere' => env('WAINWRIGHT_CASINODOG_CORSPROXY', 'https://wainwrighted.herokuapp.com/'), //corsproxy, should end with slash, download cors proxy: https://gitlab.com/casinoman/static-assets/cors-proxy
-    'wainwright_proxy' => [
-      'get_demolink' => env('WAINWRIGHT_CASINODOG_PROXY_GETDEMOLINK', true), // set to 1 if wanting to use proxy through cors_anywhere url on game import jobs
-      'get_gamelist' => env('WAINWRIGHT_CASINODOG_PROXY_GETGAMELIST', true), // set to 1 if wanting to use proxy through cors_anywhere url on game import jobs
-    ],
+return [
+        'server_ip' => env('WAINWRIGHT_CASINODOG_SERVER_IP', '127.0.0.1'),
+        'data_caching' => env('WAINWRIGHT_CASINODOG_DATA_CACHING', false), //set to true to enable caching of various data such as gamelistings and so on, drastically improving performance
+        'securitysalt' => env('WAINWRIGHT_CASINODOG_SECURITY_SALT', env('APP_KEY'), 'AA61BED99602F187DA5D033D74D1A556'), // salt used for general signing of entry sessions and so on
+        'domain' => env('WAINWRIGHT_CASINODOG_DOMAIN', env('APP_URL'), 'https://127.0.0.1'),
+        'hostname' => env('WAINWRIGHT_CASINODOG_HOSTNAME', '777.dog'),
+        'master_ip' => env('WAINWRIGHT_CASINODOG_MASTER_IP', '127.0.0.1'), // this IP should be your personal or whatever your testing on, this IP will surpass the Operator IP check
+        'testing' => env('WAINWRIGHT_CASINODOG_TESTINGCONTROLLER', true), //set to false to hard override disable all tests through TestingController. When set to true and APP_DEBUG is set to true in .env, you can make use of TestingController
+        'cors_anywhere' => env('WAINWRIGHT_CASINODOG_CORSPROXY', 'https://wainwrighted.herokuapp.com/'), //corsproxy, should end with slash, download cors proxy: https://gitlab.com/casinoman/static-assets/cors-proxy
+        'wainwright_proxy' => [
+                'get_demolink' => env('WAINWRIGHT_CASINODOG_PROXY_GETDEMOLINK', true), // set to 1 if wanting to use proxy through cors_anywhere url on game import jobs
+                'get_gamelist' => env('WAINWRIGHT_CASINODOG_PROXY_GETGAMELIST', true), // set to 1 if wanting to use proxy through cors_anywhere url on game import jobs
+        ],
+
+        'websocket' => [
+                'allowed_origin' => env('WAINWRIGHT_CASINODOG_ALLOWED_ORIGIN', '127.0.0.1, 1.1.1.1'),
+
+        ],
 
     'debug_callback' => [
       'start_balance' => 1000000,
-      'callback_endpoint' => env('WAINWRIGHT_CASINODOG_DOMAIN', env('APP_URL'), 'https://127.0.0.1').'/api/debug/callback',
+      'callback_endpoint' => env('WAINWRIGHT_CASINODOG_DOMAIN', env('APP_URL'), 'http://127.0.0.1').'/api/debug/callback',
       'api_key' => 'debug_key',
       'api_secret' => 'debug_secret',
       'controller' => \App\Http\Controllers\Casinodog\DebugCallbackController::class,

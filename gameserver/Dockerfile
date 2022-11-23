@@ -25,6 +25,7 @@ RUN rm -rf /var/www/html \
   && pecl install redis \
   && docker-php-ext-install \
   bcmath \
+  sockets \
   gd \
   intl \
   opcache \

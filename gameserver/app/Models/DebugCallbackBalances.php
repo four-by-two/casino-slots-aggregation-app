@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 
 class DebugCallbackBalances extends Eloquent  {
-    protected $table = 's';
+    protected $table = 'wainwright_debug_callback_balances';
     protected $timestamp = true;
     protected $primaryKey = 'id';
     protected $fillable = [
@@ -41,7 +41,7 @@ class DebugCallbackBalances extends Eloquent  {
             'player_id' => $player_id,
             'player_name' => $player_id.'-name',
             'currency' => $currency,
-            'balance' => config('casinodog.debug_callback.start_balance') ?? 0,
+            'balance' => 1000000,
             'created_at' => now(),
             'updated_at' => now(),
         ];

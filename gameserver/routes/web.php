@@ -17,3 +17,18 @@ use Illuminate\Http\Request;
 $router->get('/', function () use ($router) {
   return 'hello';
 });
+
+
+$router->post('/test', function (Request $request) use ($router) {
+    
+
+    $script = '
+    <script>
+        function goBack() {
+        window.history.back();
+        }
+    </script>';
+
+    echo $script;
+    echo '<script> goBack()</script>';
+});

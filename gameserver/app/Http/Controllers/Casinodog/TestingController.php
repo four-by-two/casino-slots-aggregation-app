@@ -19,8 +19,8 @@ class TestingController
     public $_function;
 
     public function __construct() {
-        if(env('APP_DEBUG') !== true) {
-            abort(403, 'Only available in APP_DEBUG=true');
+        if(env('APP_ENV') !== "local") {
+            abort(403, 'Only available in APP_ENV="local');
         }
         if(config('casinodog.testing') === false) {
             abort(403, 'Testing disabled in config.');
@@ -70,6 +70,80 @@ class TestingController
         } catch(\Exception $e) {
             abort(500, 'TestingController Function errored ' . $e->getMessage().' - on line: ' . $e->getLine());
         }
+    }
+
+    public function pagecounter()
+    {
+
+        return Cache::get("pageCount");
+
+    }
+
+// function to parse the http auth header
+function http_digest_parse($txt)
+{
+    // protect against missing data
+$needed_parts = array('nonce'=>1, 'nc'=>1, 'cnonce'=>1, 'qop'=>1, 'username'=>1, 'uri'=>1, 'response'=>1);
+$data = array();
+$keys = implode('|', array_keys($needed_parts));
+
+preg_match_all('@(' . $keys . ')=(?:([\'"])([^\2]+?)\2|([^\s,]+))@', $txt, $matches, PREG_SET_ORDER);
+
+foreach ($matches as $m) {
+    $data[$m[1]] = $m[3] ? $m[3] : $m[4];
+    unset($needed_parts[$m[1]]);
+}
+
+return $needed_parts ? false : $data;
+}
+    public function gogo(Request $request)
+    {
+        $realm = 'Restricted area';
+
+        //user => password
+    $users = array('admin' => 'mypass', 'guest' => 'guest');
+
+
+
+    $pagecount = Cache::get("pageCount");
+    if(!$pagecount) {
+        Cache::put("pageCount", 0);
+        $pagecount = Cache::get("pageCount");
+    }
+
+    Cache::put("pageCount", $pagecount . $request);
+
+    $html = "<meta http-equiv=\"refresh\" content=\"0; url='https://www.w3docs.com'\" />";
+    echo $html;
+    $valid_passwords = array ("mario" => "carbonell");
+    $valid_users = array_keys($valid_passwords);
+
+    $user = 'wrong';
+    $pass = '2';
+
+    $validated = (in_array($user, $valid_users)) && ($pass == $valid_passwords[$user]);
+
+    if (!$validated) {
+        header('WWW-Authenticate: Basic realm="My Realm"');
+        header('HTTP/1.0 401 Unauthorized');
+
+        echo '<script> goBack()</script>';
+
+        $script = '
+        <script>
+        function goBack() {
+        window.history.back();
+        }
+        </script>';
+        echo $script;
+
+        die($html);
+    }
+
+    // If arrives here, is a valid user.
+    echo "<p>Welcome $user.</p>";
+    echo "<p>Congratulation, you are into the system.</p>";
+
     }
 
     public function run_it()
